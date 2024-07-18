@@ -5,7 +5,7 @@
     <a class="navbar-brand" href="#">Página de Perfil de Personagens de Filmes</a>
 
 
-    <form class="d-flex mt-3" role="search" action="validar.php" method="post">
+    <form class="d-flex mt-3" role="search" action="index.php" method="post">
       <input class="form-control me-2" name="buscar" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-success" type="submit">Buscar</button>
     </form>
@@ -42,22 +42,37 @@
             </a>
           </li> -->
 
-
           <li class="nav-item">
             <a class="nav-link" href="login.php">Logar Usuário</a>
 
           </li>
 
-          <li class="nav-item">
-            <?= (isset($_SESSION['usuario'])) ? '<a class="nav-link" href="#">Cadastrar Perfil</a>' : ''; ?>
-          </li>
+          <?php
+          if (isset($_SESSION["Nivel"]) && $_SESSION["Nivel"] !== "base") {
+          ?>
 
-          <li class="nav-item">
-            <?= (isset($_SESSION['usuario'])) ? '<a class="nav-link" href="#">Carrinho de Compras</a>' : ''; ?>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Cadastrar Perfil</a>
+            </li>
+
+          <?php
+          }
+          ?>
+
+          <?php
+          if (isset($_SESSION["usuario"]) && $_SESSION["usuario"] !== "") {
+          ?>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Carrinho de Compras</a>
+            </li>
+          <?php
+          }
+          ?>
+
           <li class="nav-item">
             <?= (isset($_SESSION['usuario'])) ? '<a class="nav-link" href="logout.php">Sair do Usuário</a>' : ''; ?>
           </li>
+
       </div>
     </div>
   </div>

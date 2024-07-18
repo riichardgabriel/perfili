@@ -15,12 +15,27 @@
 
   <div class="container">
   <div class="row pt-5" >
+
   <?php
   include "conexao.php";
-  $sqlBuscar = "SELECT * FROM t_perfil ORDER BY RAND()";
-  $todosPerfis = mysqli_query($conexao, $sqlBuscar);
-  while ($umPerfil = mysqli_fetch_assoc($todosPerfis)){
-  ?> 
+  if(empty($_POST['buscar'])){
+    $buscar = "";
+  } else {
+    $buscar = $_POST ['buscar'];
+  }
+
+  $consulta = $conexao->prepare("SELECT * FROM t_perfil WHERE nome LIKE ? OR profissao LIKE ? OR descricao LIKE ?");
+  $buscaComCuringa = "%" . $buscar . "%";
+  $consulta->bind_param("sss", $buscaComCuringa, $buscaComCuringa, $buscaComCuringa);
+  $consulta->execute();
+  $result = $consulta->get_result();
+
+  //$sqlBuscar = "SELECT * FROM t_perfil ORDER BY RAND()";
+  //$todosPerfis = mysqli_query($conexao, $sqlBuscar);
+  //while ($umPerfil = mysqli_fetch_assoc($todosPerfis)){
+    while ($umPerfil = $result->fetch_assoc()){
+
+      ?> 
     
     <div class="col-12 col-sm-8 col-md-6 col-lg-3 mt-5">
       <div class="card" style="height:100%" >
@@ -30,13 +45,13 @@
           <h4 class="card-title"><?php echo $umPerfil['nome']; ?></h4>
           <h6 class="card-subtitle mb-2 text-muted"><?php echo $umPerfil['profissao']; ?></h6>
           <p class="card-text"> <?php echo $umPerfil['descricao']; ?></p>
-            <p>
+          <p>
             <?php 
             if($umPerfil['instagram'] != ""){?>
                 <a href="<?php echo $umPerfil['instagram']; ?>" class="btn"><i class="bi bi-instagram"></i></a>
                 <?php
                   }
-                ?>
+                  ?>
 
             <?php 
             if($umPerfil['linkedin'] != ""){?>
